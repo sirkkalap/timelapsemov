@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e
+
+SIZE=${1-800x600}
+mkdir $SIZE
+
+for f in `ls *.jpg`; do
+  convert $f $@ -resize $SIZE ${SIZE}/$f;
+done
+
+cd $SIZE
+imgseq.py
+cd ..
+
+ffmpeg -b 800000 -i ${SIZE}/index/img%03d.jpg mov.mpg
